@@ -42,23 +42,23 @@ export default function Hero() {
 
     return (
         <div className="flex items-center justify-items-center min-h-screen">
-            <div className="relative w-screen h-screen" style={{ backgroundImage: `url(${bg.src})`, backgroundSize: 'cover' }}>
+            <div className="relative w-screen h-screen bg-cover bg-center" style={{ backgroundImage: `url(${bg.src})`}}>
                 {/* Overlay com busca e título */}
-                <div className="absolute top-0 left-0 w-full h-full flex flex-col items-start justify-center px-16 bg-gradient-to-r from-black/40 to-transparent">
-                    <h1 className="text-white text-5xl font-bold">Our deep spot...</h1>
-                    <h2 className="text-white text-9xl font-bold mt-2">EXPLORE THE SEA</h2>
+                <div className="absolute top-0 left-0 w-full h-full flex flex-col items-start justify-center px-8 lg:px-16 bg-gradient-to-r from-black/40 to-transparent">
+                    <h1 className="text-white text-sm lg:text-5xl font-bold">Our deep spot...</h1>
+                    <h2 className="text-white text-3xl lg:text-9xl font-bold mt-2">EXPLORE THE SEA</h2>
                     <p className="text-white text-lg mt-4 w-1/2">
                         Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.
                     </p>
                     {/* Botões */}
-                    <div className="mt-6 flex gap-4">
-                        <div className="flex">
+                    <div className="mt-6 flex gap-4 max-lg:flex-col w-full">
+                        <div className="flex w-full">
                             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!} libraries={["places"]}>
-                                <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+                                <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged} className="w-full">
                                     <input
                                         type="text"
                                         placeholder="Search for a city..."
-                                        className="w-[400px] bg-white text-black px-6 py-3 rounded-full font-semibold shadow-md"
+                                        className="w-full lg:w-[400px] bg-white text-black px-6 py-3 rounded-full font-semibold shadow-md"
                                     />
                                 </Autocomplete>
                             </LoadScript>
@@ -67,7 +67,7 @@ export default function Hero() {
                         <button className="border border-white text-white px-6 py-3 rounded-full font-semibold">Know More</button>
                     </div>
                     {/* Barra de busca estilizada */}
-                    <div className="absolute top-10 right-10 bg-white/20 backdrop-blur-lg p-6 rounded-xl w-80 shadow-lg">
+                    <div className="absolute top-20 right-10 bg-white/20 backdrop-blur-lg p-6 rounded-xl w-80 shadow-lg hidden">
                         <h3 className="text-white text-xl font-semibold mb-2">Login Here</h3>
                         <input
                             type="text"

@@ -1,0 +1,7 @@
+{
+	"recommendations": [
+		"esbenp.prettier-vscode", // Prettier - Code formatter
+		"editorconfig.editorconfig", // EditorConfig for VS Code
+		"dbaeumer.vscode-eslint" // ESLint
+	]
+}
