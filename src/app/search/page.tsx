@@ -1,19 +1,43 @@
 'use client';
 
 import { Autocomplete, GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation'; 
 import { diveSpots } from "../data";
-import bg from '../../../assets/bg.jpg'
+import bg from '../../../assets/bg.jpg';
 import Image from "next/image";
 import Header from "../components/Header";
+
+// Definição dos tipos
+type Location = { lat: number; lng: number };
+
+type Spot = {
+  lat: number;
+  lng: number;
+  name: string;
+  depth: number;
+  duration: number;
+  rating: number;
+  src?: string;
+  comments: { user: string; comment: string }[];
+  weather?: {
+    temperature?: number;
+    windSpeed?: number;
+    visibility?: number;
+  };
+  sea?: {
+    temperature?: number;
+    currentStrength?: string;
+    waveHeight?: number;
+  };
+};
 
 const mapContainerStyle = {
   width: '100vw',
   height: '100%',
 };
 
-const mapOptions = {
+const mapOptions: google.maps.MapOptions = {
   styles: [
     { "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }] },
     { "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] },
@@ -23,28 +47,33 @@ const mapOptions = {
   fullscreenControl: false,
 };
 
-const center = { lat: 0, lng: 0 };
+const center: Location = { lat: 0, lng: 0 };
 
-const libraries = ["places"];
+const libraries: ("places")[] = ["places"];
 
-export default function Page() {
+const PageComponent = () => {
   const router = useRouter(); 
   const searchParams = useSearchParams();
+  
+  
   const currentLat = searchParams.get('lat');
   const currentLng = searchParams.get('lng');
 
-  const [autocomplete, setAutocomplete] = useState(null);
-  const [location, setLocation] = useState({ lat: parseFloat(currentLat || '0'), lng: parseFloat(currentLng || '0') });
-  const [search, setSearch] = useState(null);
-  const [visibleSpots, setVisibleSpots] = useState([]);
-  const [selectedSpot, setSelectedSpot] = useState(null);
+  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+  const [location, setLocation] = useState<Location>({
+    lat: parseFloat(currentLat || '0'),
+    lng: parseFloat(currentLng || '0'),
+  });
+  const [search, setSearch] = useState<google.maps.places.PlaceResult | null>(null);
+  const [visibleSpots, setVisibleSpots] = useState<Spot[]>([]);
+  const [selectedSpot, setSelectedSpot] = useState<Spot | null>(null);
 
-  const onLoad = (autoC) => setAutocomplete(autoC);
+  const onLoad = (autoC: google.maps.places.Autocomplete) => setAutocomplete(autoC);
 
   const onPlaceChanged = () => {
     if (autocomplete) {
       const place = autocomplete.getPlace();
-      if (place.geometry) {
+      if (place.geometry?.location) {
         setSearch(place);
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
@@ -55,7 +84,7 @@ export default function Page() {
   };
 
   const handleDiscover = () => {
-    if (search?.geometry) {
+    if (search?.geometry?.location) {
       const lat = search.geometry.location.lat();
       const lng = search.geometry.location.lng();
       setLocation({ lat, lng });
@@ -63,22 +92,22 @@ export default function Page() {
     }
   };
 
-  const handleSelect = (spot) => {
+  const handleSelect = (spot: Spot) => {
     if (spot) {
       setSelectedSpot(spot);
       setLocation({ lat: spot.lat, lng: spot.lng });
     }
   };
 
-  const getVisibleDiveSpots = (map) => {
+  const getVisibleDiveSpots = (map: google.maps.Map | null): Spot[] => {
     if (!map) return [];
-    const bounds = map?.getBounds();
+    const bounds = map.getBounds();
     return diveSpots.filter(spot =>
-      bounds?.contains({ lat: spot.lat, lng: spot.lng })
+      bounds?.contains({ lat: spot.lat, lng: spot.lng }) ?? false
     );
   };
 
-  const onMapLoad = (map) => {
+  const onMapLoad = (map: google.maps.Map) => {
     setVisibleSpots(getVisibleDiveSpots(map));
     map.addListener("bounds_changed", () => {
       setVisibleSpots(getVisibleDiveSpots(map));
@@ -89,7 +118,7 @@ export default function Page() {
     <div className="flex max-h-screen h-screen flex-col overflow-hidden">
       <Header />
       <div className="bg-gray-100 h-full">
-        <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY} libraries={libraries}>
+        <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string} libraries={libraries}>
           <div className="relative w-full h-full">
             <GoogleMap 
               mapContainerStyle={mapContainerStyle} 
@@ -124,47 +153,25 @@ export default function Page() {
                 <div>
                   <button onClick={() => setSelectedSpot(null)} className="text-blue-500 mb-4">← Back to List</button>
                   <div className="relative rounded-xl overflow-hidden mb-4">
-                  <Image 
-                    src={selectedSpot.src || bg.src} 
-                    alt={selectedSpot.name} 
-                    className="object-cover w-full h-40"
-                    width={480} 
-                    height={269} 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                </div>
+                    <Image 
+                      src={selectedSpot.src || bg.src} 
+                      alt={selectedSpot.name} 
+                      className="object-cover w-full h-40"
+                      width={480} 
+                      height={269} 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  </div>
                   <h2 className="text-xl font-semibold text-gray-800">{selectedSpot.name}</h2>
                   <p className="text-gray-600">Depth: {selectedSpot.depth}m | Duration: {selectedSpot.duration} min</p>
-                  <h3 className="text-lg font-semibold text-gray-800 mt-4">Weather Conditions</h3>
-                  <p className="text-gray-600 text-sm">Temperature: {selectedSpot?.weather?.temperature}°C</p>
-                  <p className="text-gray-600 text-sm">Wind Speed: {selectedSpot?.weather?.windSpeed} km/h</p>
-                  <p className="text-gray-600 text-sm">Visibility: {selectedSpot?.weather?.visibility}m</p>
-                  
-                  <h3 className="text-lg font-semibold text-gray-800 mt-4">Sea Conditions</h3>
-                  <p className="text-gray-600 text-sm">Water Temperature: {selectedSpot?.sea?.temperature}°C</p>
-                  <p className="text-gray-600 text-sm">Current Strength: {selectedSpot?.sea?.currentStrength}</p>
-                  <p className="text-gray-600 text-sm">Wave Height: {selectedSpot?.sea?.waveHeight}m</p>
-                  <div className="mt-4">
-                    <h3 className="font-semibold">Comments:</h3>
-                    {selectedSpot.comments.map((comment, index) => (
-                      <div key={index} className="mt-2 p-2 bg-gray-100 rounded-lg">
-                        <p className="font-medium">{comment.user}</p>
-                        <p className="text-sm text-gray-600">{comment.comment}</p>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               ) : (
                 <>
                   <h2 className="text-xl font-semibold text-gray-800">Popular Dive Spots</h2>
-                  {visibleSpots.length === 0 && <div className="text-base  font-semibold text-gray-400 h-full flex items-center justify-center">Dive not found!</div>}
+                  {visibleSpots.length === 0 && <div className="text-base font-semibold text-gray-400 h-full flex items-center justify-center">Dive not found!</div>}
                   {visibleSpots.map((spot, index) => (
-                    <div 
-                      key={index} 
-                      onClick={() => handleSelect(spot)} 
-                      className="cursor-pointer flex flex-col bg-gray-50 shadow-lg rounded-xl overflow-hidden transition-all hover:shadow-xl hover:scale-[1.02] min-h-fit"
-                    >
-                      {/* Imagem com overlay gradiente */}
+                    <div key={index} onClick={() => handleSelect(spot)} className="cursor-pointer flex flex-col bg-gray-50 shadow-lg rounded-xl overflow-hidden transition-all hover:shadow-xl hover:scale-[1.02] min-h-fit">
+                         {/* Imagem com overlay gradiente */}
                 <div className="relative">
                   <Image 
                     src={spot.src || bg.src} 
@@ -204,4 +211,12 @@ export default function Page() {
       </div>
     </div>
   );
+}
+
+export default function Page() {
+  return (
+    <Suspense>
+      <PageComponent />
+    </Suspense>
+  )
 }
