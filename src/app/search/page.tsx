@@ -5,6 +5,7 @@ import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { diveSpots } from '../data';
 import bg from '../../../assets/bg.jpg';
+import anchorIcon from '../../../assets/anchor.png';
 import Image from 'next/image';
 import Header from '../components/Header';
 
@@ -36,6 +37,8 @@ const mapContainerStyle = {
 	width: '100vw',
 	height: '100%',
 };
+
+
 
 const mapOptions: google.maps.MapOptions = {
 	styles: [
@@ -140,6 +143,12 @@ const PageComponent = () => {
 								<Marker
 									key={index}
 									position={{ lat: spot.lat, lng: spot.lng }}
+                  icon={{
+                    url: anchorIcon.src, // 🖼️ Caminho do seu ícone (pode ser uma URL externa)
+                    scaledSize: new window.google.maps.Size(40, 40), // 🔹 Tamanho do ícone
+                    origin: new window.google.maps.Point(0, 0),
+                    anchor: new window.google.maps.Point(20, 40), // 🔹 Ajusta o ponto de ancoragem
+                  }}
 								/>
 							))}
 						</GoogleMap>
@@ -161,7 +170,7 @@ const PageComponent = () => {
 						</div>
 
 						<div className='absolute max-lg:bottom-0 lg:top-4 lg:right-4 bg-white p-5 rounded-xl shadow-2xl flex flex-col gap-4 w-full lg:w-[25%] h-[35vh] lg:h-[80vh]  transition-all'>
-							<div className="flex flex-col h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track- gap-2">
+							<div className='flex flex-col h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track- gap-2'>
 								{selectedSpot ? (
 									<div>
 										<button
@@ -187,6 +196,54 @@ const PageComponent = () => {
 											Depth: {selectedSpot.depth}m | Duration:{' '}
 											{selectedSpot.duration} min
 										</p>
+										<h3 className='text-lg font-semibold text-gray-800 mt-4'>
+											Weather Conditions
+										</h3>
+										<p className='text-gray-600 text-sm'>
+											Temperature:{' '}
+											{selectedSpot?.weather?.temperature}°C
+										</p>
+										<p className='text-gray-600 text-sm'>
+											Wind Speed: {selectedSpot?.weather?.windSpeed}{' '}
+											km/h
+										</p>
+										<p className='text-gray-600 text-sm'>
+											Visibility:{' '}
+											{selectedSpot?.weather?.visibility}m
+										</p>
+
+										<h3 className='text-lg font-semibold text-gray-800 mt-4'>
+											Sea Conditions
+										</h3>
+										<p className='text-gray-600 text-sm'>
+											Water Temperature:{' '}
+											{selectedSpot?.sea?.temperature}°C
+										</p>
+										<p className='text-gray-600 text-sm'>
+											Current Strength:{' '}
+											{selectedSpot?.sea?.currentStrength}
+										</p>
+										<p className='text-gray-600 text-sm'>
+											Wave Height: {selectedSpot?.sea?.waveHeight}m
+										</p>
+										<div className='mt-4'>
+											<h3 className='font-semibold'>Comments:</h3>
+											{selectedSpot.comments.map(
+												(comment, index) => (
+													<div
+														key={index}
+														className='mt-2 p-2 bg-gray-100 rounded-lg'
+													>
+														<p className='font-medium'>
+															{comment.user}
+														</p>
+														<p className='text-sm text-gray-600'>
+															{comment.comment}
+														</p>
+													</div>
+												)
+											)}
+										</div>
 									</div>
 								) : (
 									<>
@@ -202,7 +259,7 @@ const PageComponent = () => {
 											<div
 												key={index}
 												onClick={() => handleSelect(spot)}
-												className='cursor-pointer flex lg:flex-col bg-gray-50 shadow-lg rounded-xl overflow-hidden transition-all hover:shadow-xl hover:scale-[1.02] min-h-fit'
+												className='cursor-pointer flex lg:flex-col bg-gray-50 shadow-lg rounded-xl overflow-hidden transition-all hover:shadow-xl hover:scale-[1.02] min-h-max'
 											>
 												{/* Imagem com overlay gradiente */}
 												<div className='relative max-lg:w-[20%]'>
