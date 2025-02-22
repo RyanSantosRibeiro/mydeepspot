@@ -1,6 +1,12 @@
+'use client';
+import Login from '@/components/Login';
 import Link from 'next/link';
 
 export default function Header({ transparent = false }) {
+	const handleLogout = async () => {
+		await fetch('/logout');
+		window.location.href = '/login';
+	};
 	return (
 		<header
 			className={`py-4 px-6 flex items-center justify-between w-full top-0 left-0 z-50 transition-all ${
@@ -21,7 +27,6 @@ export default function Header({ transparent = false }) {
 					MY DEEP SPOT
 				</p>
 			</Link>
-
 			{/* Navegação */}
 			<nav
 				className={`hidden md:flex gap-6 font-medium w-full justify-start transition-all ${
@@ -31,15 +36,18 @@ export default function Header({ transparent = false }) {
 				<Link href='/' className='hover:text-blue-500 text-lg font-medium'>
 					Home
 				</Link>
-				<Link href='/favorites' className='hover:text-blue-500 text-lg font-medium'>
+				<Link
+					href='/favorites'
+					className='hover:text-blue-500 text-lg font-medium'
+				>
 					Favoritos
 				</Link>
 			</nav>
-
 			{/* Botão de Login */}
 			<button className='bg-gradient-to-r from-blue-500 to-green-400 text-white px-6 py-2 rounded-full font-semibold shadow-md hover:scale-105 transition-all'>
 				Login
 			</button>
+			<button onClick={handleLogout}>Sair</button>;
 		</header>
 	);
 }

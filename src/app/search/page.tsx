@@ -153,12 +153,12 @@ const PageComponent = () => {
 							))}
 						</GoogleMap>
 
-						<div className='absolute top-4 left-[2.5vw] lg:left-4 bg-white p-4 rounded-xl shadow-lg flex gap-4 items-center w-full max-w-[95vw] [&>div]:[width:100%]'>
-							<Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+						<div className='absolute top-4 left-[2.5vw] lg:left-4 bg-white p-4 rounded-xl shadow-lg flex gap-4 items-center w-full max-w-[95vw] lg:max-w-[30vw] [&>div]:[width:100%]'>
+							<Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged} className='w-full'>
 								<input
 									type='text'
 									placeholder='Search for a city...'
-									className='w-full max-w-[300px] bg-gray-100 text-gray-800 px-4 py-2 rounded-full font-medium shadow-inner focus:outline-none'
+									className='w-full max-lg:max-w-[300px] bg-gray-100 text-gray-800 px-4 py-2 rounded-full font-medium shadow-inner focus:outline-none'
 								/>
 							</Autocomplete>
 							<button
