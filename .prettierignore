@@ -1,2 +1,13 @@
-**/node_modules
-**/node/libs
+# Build artifacts
+.next/
+.turbo/
+_next/
+__tmp__/
+dist/
+node_modules/
+target/
+compiled/
+
+pnpm-lock.yaml
+
+types_db.ts
