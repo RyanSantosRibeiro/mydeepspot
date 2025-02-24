@@ -14,32 +14,36 @@ interface NavlinksProps {
 
 export default function Navlinks({ user }: NavlinksProps) {
   const router = getRedirectMethod() === 'client' ? useRouter() : null;
+  console.log(user)
 
   return (
     <div className="relative flex flex-row justify-between py-4 align-center md:py-6">
       <div className="flex items-center flex-1">
         <Link href="/" className={s.logo} aria-label="Logo">
-          <Logo />
+          <Logo className="filter grayscale"/>
         </Link>
         <nav className="ml-6 space-x-2 lg:block">
           <Link href="/" className={s.link}>
+            Home
+          </Link>
+          <Link href="/pricing" className={s.link}>
             Pricing
           </Link>
-          {user && (
-            <Link href="/account" className={s.link}>
-              Account
-            </Link>
-          )}
         </nav>
       </div>
       <div className="flex justify-end space-x-8">
         {user ? (
-          <form onSubmit={(e) => handleRequest(e, SignOut, router)}>
-            <input type="hidden" name="pathName" value={usePathname()} />
-            <button type="submit" className={s.link}>
-              Sign out
-            </button>
-          </form>
+          <> 
+              <Link href="/account" className={s.link}>
+                Hi, {user?.user_metadata?.full_name || "Diver" }
+              </Link>
+            <form onSubmit={(e) => handleRequest(e, SignOut, router)}>
+              <input type="hidden" name="pathName" value={usePathname()} />
+              <button type="submit" className={s.link}>
+                Sign out
+              </button>
+            </form>
+          </>
         ) : (
           <Link href="/signin" className={s.link}>
             Sign In
