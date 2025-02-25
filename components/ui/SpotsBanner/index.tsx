@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { diveSpots } from '../../../assets/data';
 import bg from '../../../assets/bg.jpg';
 import Image from 'next/image';
+import { SpotsInfoProps } from '@/app/spots/[id]/page';
 
 const filtersList = [
   'Mais Avaliados',
@@ -22,19 +23,19 @@ const filtersList = [
   'Oceania'
 ];
 
-const SpotsCards = (spot) => {
-    const [showGallery, setShowGallery] = useState(false);
+const SpotsBanner = ({spot}: {spot: SpotsInfoProps}) => {
+  const [showGallery, setShowGallery] = useState(false);
   return (
     <div className="bg-gray-100 flex flex-col overflow-hidden w-full">
-      <div className="w-full px-6 mx-auto">
+      <div className="w-full">
         {/* Banner com imagens */}
         <section className="relative w-full h-[400px] bg-gray-200 flex items-center justify-center">
           <Image
-            src={spot.mainImage || '/placeholder.jpg'}
-            alt={spot.name}
+            src={spot.mainImage || bg}
+            alt={spot?.name || 'banner'}
             layout="fill"
             objectFit="cover"
-            className="rounded-lg"
+            className=""
           />
           <div className="absolute bottom-4 left-4 flex gap-2">
             {spot.images
@@ -42,7 +43,7 @@ const SpotsCards = (spot) => {
               .map((img, index) => (
                 <Image
                   key={index}
-                  src={img}
+                  src={img.src}
                   alt={`Imagem ${index + 1}`}
                   width={100}
                   height={100}
@@ -63,7 +64,7 @@ const SpotsCards = (spot) => {
               {spot.images?.map((img, index) => (
                 <Image
                   key={index}
-                  src={img}
+                  src={img.src}
                   alt={`Imagem ${index + 1}`}
                   width={200}
                   height={200}
@@ -78,4 +79,4 @@ const SpotsCards = (spot) => {
   );
 };
 
-export default SpotsCards;
+export default SpotsBanner;

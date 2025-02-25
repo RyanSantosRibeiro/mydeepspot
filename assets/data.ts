@@ -7,6 +7,7 @@ export const diveSpots = [
       rating: 4.8,
       depth: 25, // metros
       duration: 50, // minutos
+      region: 'America do Sul',
       comments: [
         {
           user: "John Doe",
@@ -28,6 +29,7 @@ export const diveSpots = [
       rating: 4.9,
       depth: 40,
       duration: 60,
+      region: 'America do Norte',
       comments: [
         {
           user: "DiverJake",
@@ -49,6 +51,7 @@ export const diveSpots = [
       rating: 4.9,
       depth: 30,
       duration: 45,
+      region: 'Oceania',
       comments: [
         {
           user: "Mark Taylor",
@@ -65,6 +68,7 @@ export const diveSpots = [
       rating: 4.8,
       depth: 35,
       duration: 50,
+      region: 'Europa',
       comments: [
         {
           user: "Emma Brown",
@@ -81,6 +85,7 @@ export const diveSpots = [
       rating: 4.9,
       depth: 20,
       duration: 60,
+      region: 'Asia',
       comments: [
         {
           user: "Oliver Wilson",

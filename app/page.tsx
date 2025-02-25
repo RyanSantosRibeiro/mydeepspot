@@ -15,12 +15,8 @@ export default async function PricingPage() {
     getSubscription(supabase)
   ]);
   return (
-    <> 
-      <Hero
-        user={user}
-        products={products ?? []}
-        subscription={subscription}
-      />
+    <>
+      <Hero />
       <SpotsCards />
     </>
   );

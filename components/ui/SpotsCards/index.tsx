@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { diveSpots } from '../../../assets/data';
 import bg from '../../../assets/bg.jpg';
 import Image from 'next/image';
+import { SpotsInfoProps } from '@/app/spots/[id]/page';
 
 const filtersList = [
   'Mais Avaliados',
@@ -24,10 +25,10 @@ const filtersList = [
 
 const SpotsCards = () => {
   const router = useRouter();
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string>('empty');
 
   const toggleFilter = (filter: string) => {
-    setActiveFilter(prev => (prev === filter ? null : filter));
+    setActiveFilter(prev => (prev === filter ? 'empty' : filter));
   };
 
   const sortSpots = (spots: typeof diveSpots) => {
@@ -51,7 +52,7 @@ const SpotsCards = () => {
   };
 
   const handleSelect = (spot: any) => {
-    router.push(`/spots/?id=${spot.id}`);
+    router.push(`/spots/${spot.id}`);
   };
 
   return (
@@ -78,7 +79,7 @@ const SpotsCards = () => {
 
         {/* Lista de Spots */}
         <div className="grid grid-cols-5 gap-8 mb-16">
-          {filterSpots().map(spot => (
+          {filterSpots().map((spot:SpotsInfoProps) => (
             <div
               key={spot.id}
               onClick={() => handleSelect(spot)}
@@ -86,8 +87,8 @@ const SpotsCards = () => {
             >
               <div className="relative max-lg:w-[20%]">
                 <Image
-                  src={spot.src || bg.src}
-                  alt={spot.name}
+                  src={spot?.src || bg.src}
+                  alt={spot?.name || 'Image'}
                   className="object-cover w-full h-40"
                   width={480}
                   height={269}
@@ -97,12 +98,12 @@ const SpotsCards = () => {
 
               <div className="p-4 flex flex-col gap-2">
                 <h2 className="text-base lg:text-lg font-bold text-gray-900 flex-1 lg:min-h-14">
-                  {spot.name}
+                  {spot?.name}
                 </h2>
                 <div className="flex items-center gap-2">
                   <span className="text-yellow-500 text-lg whitespace-nowrap">⭐ {spot.rating}</span>
                   <span className="text-gray-500 text-sm whitespace-nowrap">
-                    ({spot.comments.length} reviews)
+                    ({spot?.comments?.length} reviews)
                   </span>
                 </div>
                 <div className="text-gray-600 text-sm flex flex-wrap gap-2">
