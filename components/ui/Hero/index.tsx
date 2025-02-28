@@ -61,11 +61,11 @@ export default function Hero() {
 
   return (
     <div
-      className="relative w-full min-h-full bg-cover bg-center h-[calc(80dvh-5rem)]"
+      className="relative w-full min-h-full bg-cover bg-center h-auto max-md:py-4 md:h-[calc(80dvh-5rem)]"
       style={{ backgroundImage: `url(${bg.src})` }}
     >
       {/* Overlay com busca e título */}
-      <div className="relative top-0 left-0 w-full min-h-full h-full flex flex-col items-start justify-center px-8 lg:px-16 bg-gradient-to-r from-black/40 to-transparent">
+      <div className="relative top-0 left-0 w-full min-h-full h-full flex flex-col items-start justify-center lg:px-16 bg-gradient-to-r from-black/40 to-transparent">
         <div className="container mx-auto flex flex-col md:flex-row gap-7 md:gap-16">
           <div className="flex flex-col w-full">
             <h1 className="text-white text-sm lg:text-5xl font-bold flex gap-2 items-center ">
@@ -75,7 +75,7 @@ export default function Hero() {
             <h2 className="text-white text-3xl lg:text-9xl font-bold mt-2">
               EXPLORE THE SEA
             </h2>
-            <p className="text-white text-lg mt-4 w-1/2">
+            <p className="text-white text-lg mt-4 w-full">
               Discover the wonders beneath the waves. Dive into crystal-clear
               waters, explore vibrant coral reefs, and experience the magic of
               the ocean like never before.
@@ -92,7 +92,7 @@ export default function Hero() {
                   <Autocomplete
                     onLoad={onLoad}
                     onPlaceChanged={onPlaceChanged}
-                    className="w-auto"
+                    className="w-full md:w-auto"
                   >
                     <input
                       type="text"
