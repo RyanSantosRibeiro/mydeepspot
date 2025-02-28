@@ -81,7 +81,7 @@ export default function Navlinks({ user }: NavlinksProps) {
             </button>
           </>
         ) : (
-          <Link href="/signin" className="text-gray-700 hover:text-gray-900">
+          <Link href="/signin" className="text-white">
             Sign In
           </Link>
         )}
