@@ -47,11 +47,11 @@ const SpotsCards = ({spots}:{spots: SpotsInfoProps[]}) => {
 
   return (
     <div id='resume-dives' className="bg-gray-100 flex flex-col overflow-hidden w-full pt-5">
-      <div className="w-full px-6 mx-auto">
-        <h2 className="text-2xl font-semibold text-gray-800 my-6">Popular Dive Spots</h2>
+      <div className="w-full px-6 mx-auto container">
+        <h2 className="text-center text-6xl font-semibold text-gray-800 my-6">Popular Dive Spots</h2>
         
         {/* Filters */}
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6 justify-center items-center">
           {filtersList?.map(filter => (
             <p
               key={filter}
@@ -68,18 +68,18 @@ const SpotsCards = ({spots}:{spots: SpotsInfoProps[]}) => {
         </div>
 
         {/* Spot List */}
-        <div className="grid grid-cols-1 md:grid-cols-3  lg:grid-cols-5 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3  lg:grid-cols-3 gap-8 mb-16">
           {filterSpots()?.map((spot: SpotsInfoProps) => (
             <div
               key={spot.id}
               onClick={() => handleSelect(spot)}
-              className="cursor-pointer flex lg:flex-col bg-gray-50 shadow-lg rounded-xl overflow-hidden transition-all hover:shadow-xl hover:scale-[1.02] min-h-max"
+              className="cursor-pointer flex lg:flex-col bg-gray-50  rounded-xl overflow-hidden transition-all hover:shadow-xl hover:scale-[1.02] min-h-max"
             >
               <div className="relative max-lg:w-[20%]">
                 <Image
                   src={spot?.spots_images?.[0]?.src || bg.src}
                   alt={spot?.name || 'Image'}
-                  className="object-cover w-full h-40"
+                  className="object-cover w-full h-40 lg:h-auto "
                   width={480}
                   height={269}
                 />

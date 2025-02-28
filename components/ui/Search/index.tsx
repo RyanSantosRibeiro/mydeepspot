@@ -183,7 +183,7 @@ const PageComponent = ({ spots }: { spots: SpotsInfoProps[] }) => {
             </GoogleMap>
 
             {/* Sidebar */}
-            <div className="w-full md:w-[20%] h-full max-md:max-h-[44vh] md:h-full flex flex-col  rounded-r-xl shadow-lg">
+            <div className="w-full md:w-[20%] lg:w-[30%] h-full max-md:max-h-[44vh] md:h-full flex flex-col  rounded-r-xl shadow-lg">
               <div className="bg-white p-4 flex gap-4 items-center w-full [&>div]:[width:100%] h-auto max-h-full">
                 <Autocomplete
                   onLoad={onLoad}

@@ -72,7 +72,7 @@ const SpotsWeather = ({
   }, [weather]);
 
   return (
-    <section className="bg-white p-8 lg:p-8">
+    <section className="container bg-white p-8 lg:p-8">
       {/* <h1 className="text-4xl font-bold text-gray-900">{spot.name}</h1> */}
 
       {weather ? (
