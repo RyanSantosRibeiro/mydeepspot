@@ -23,7 +23,7 @@ const PremiumModal = ({hasOpen=false}:{hasOpen?: boolean}) => {
       return;
     }
     window.location.replace(
-      `https://buy.stripe.com/test_6oEbL27xIbNY2Lm5kk?prefilled_email=${encodeURIComponent(email)}`
+      `https://buy.stripe.com/fZe4jr68v1SEdxK3cd?prefilled_email=${encodeURIComponent(email)}`
     );
   };
 
