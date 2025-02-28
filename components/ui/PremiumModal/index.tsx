@@ -12,7 +12,7 @@ import Input from '../Input';
 import premiumBg from '@/assets/premium-bg.jpg';
 import windy from '@/assets/windy.png';
 
-const PremiumModal = ({hasOpen=false}:{hasOpen: boolean}) => {
+const PremiumModal = ({hasOpen=false}:{hasOpen?: boolean}) => {
   const [open, setOpen] = useState(hasOpen ? hasOpen : false);
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | undefined>();
