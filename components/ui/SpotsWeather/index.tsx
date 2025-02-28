@@ -76,7 +76,7 @@ const SpotsWeather = ({
       {/* <h1 className="text-4xl font-bold text-gray-900">{spot.name}</h1> */}
 
       {weather ? (
-        <div className="container mt-6 flex flex-col gap-7">
+        <div className="w-full mt-6 flex flex-col gap-7">
           {/* Clima Atual - Estilizado */}
           <div className="flex-col w-full  h-fit bg-white bg-opacity-90 p-6 rounded-3xl shadow-xl backdrop-blur-lg border border-gray-200">
             {/* Cabeçalho */}

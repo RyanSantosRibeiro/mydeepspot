@@ -23,6 +23,7 @@ export interface SpotsInfoProps {
   duration?: number;
   difficulty?: string;
   equipment?: string;
+  gas?: string;
   priceRange?: string;
   familyFriendly?: boolean;
   maxGuests?: number;

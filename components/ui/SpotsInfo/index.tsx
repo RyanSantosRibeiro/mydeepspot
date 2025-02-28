@@ -17,7 +17,7 @@ import SpotsMaps from '../SpotsMaps';
 const SpotsInfo = ({ spot }: { spot: SpotsInfoProps }) => {
   if(!spot) return null;
   return (
-    <section className="container bg-white  rounded-2xl p-6 lg:p-8 space-y-6 flex flex-row">
+    <section className="container bg-white  rounded-2xl p-6 lg:p-8 space-y-6 flex flex-col md:flex-row">
       <div className="flex flex-col justify-start items-start w-full">
         {/* 📌 Spot Name */}
         <h1 className="text-4xl font-bold text-gray-900">{spot?.name}</h1>
@@ -41,11 +41,17 @@ const SpotsInfo = ({ spot }: { spot: SpotsInfoProps }) => {
         <p className="text-gray-700 leading-relaxed">{spot?.description}</p>
 
         {/* 📊 Detailed Information */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-4">
           <div className="flex items-center gap-3 text-gray-700">
             🏊‍♂️{' '}
             <span>
               <strong>Depth:</strong> {spot?.depth}m
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-gray-700">
+            ⏳{' '}
+            <span>
+              <strong>Gas:</strong> {spot?.gas}
             </span>
           </div>
           <div className="flex items-center gap-3 text-gray-700">

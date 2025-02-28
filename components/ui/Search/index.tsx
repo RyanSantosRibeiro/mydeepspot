@@ -121,7 +121,7 @@ const PageComponent = ({ spots }: { spots: SpotsInfoProps[] }) => {
           }
           libraries={libraries}
         >
-          <div className="relative w-full h-full flex">
+          <div className="relative w-full h-full flex flex-col md:flex-row">
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
               center={location || center}
@@ -183,8 +183,8 @@ const PageComponent = ({ spots }: { spots: SpotsInfoProps[] }) => {
             </GoogleMap>
 
             {/* Sidebar */}
-            <div className="w-full md:w-[20%] h-full flex flex-col  rounded-r-xl shadow-lg">
-              <div className="bg-white p-4 flex gap-4 items-center w-full max-w-[95vw] [&>div]:[width:100%]">
+            <div className="w-full md:w-[20%] h-full max-h-[44vh] md:h-full flex flex-col  rounded-r-xl shadow-lg">
+              <div className="bg-white p-4 flex gap-4 items-center w-full [&>div]:[width:100%] h-auto max-h-full">
                 <Autocomplete
                   onLoad={onLoad}
                   onPlaceChanged={onPlaceChanged}
@@ -222,11 +222,11 @@ const PageComponent = ({ spots }: { spots: SpotsInfoProps[] }) => {
                         className="cursor-pointer flex lg:flex-col bg-gray-50 shadow-lg rounded-xl overflow-hidden transition-all hover:shadow-xl hover:scale-[1.02] min-h-max"
                       >
                         {/* Imagem com overlay gradiente */}
-                        <div className="relative max-lg:w-[20%]">
+                        <div className="relative max-lg:w-[35%]">
                           <Image
                             src={spot?.spots_images?.[0]?.src || bg.src}
                             alt={spot.name || ''}
-                            className="object-cover w-full h-40"
+                            className="object-cover w-full h-full md:max-h-40"
                             width={480}
                             height={269}
                           />
@@ -236,10 +236,10 @@ const PageComponent = ({ spots }: { spots: SpotsInfoProps[] }) => {
                         {/* Conteúdo */}
                         <div className="p-4 flex flex-col gap-2">
                           <div className="flex items-center gap-2">
-                            <h2 className="text-base lg:text-lg font-bold text-gray-900 flex-1">
+                            <h2 className="text-base lg:text-md font-bold text-gray-900 flex-1">
                               {spot.name}
                             </h2>
-                            <span className="text-yellow-500 text-lg whitespace-nowrap">
+                            <span className="text-yellow-500 text-base whitespace-nowrap">
                               ⭐ {spot?.rating}
                             </span>
                             <span className="text-gray-500 text-sm whitespace-nowrap">

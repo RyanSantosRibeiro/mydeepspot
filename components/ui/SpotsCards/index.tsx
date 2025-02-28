@@ -68,7 +68,7 @@ const SpotsCards = ({spots}:{spots: SpotsInfoProps[]}) => {
         </div>
 
         {/* Spot List */}
-        <div className="grid grid-cols-5 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3  lg:grid-cols-5 gap-8 mb-16">
           {filterSpots()?.map((spot: SpotsInfoProps) => (
             <div
               key={spot.id}
