@@ -1,122 +1,121 @@
 'use client';
 
-import { Suspense, useEffect, useRef } from 'react';
-import L from 'leaflet';
-import anchor from '@/assets/anchor.png';
-import { SpotsInfoProps } from '@/app/spots/[id]/page';
-import { diveSpots } from '@/assets/data';
+import { useEffect, useState } from 'react';
+import { fetchWeatherApi } from 'openmeteo';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
+import PremiumModal from '../PremiumModal';
+import marineImage from '@/assets/windy.png';
 
-const WindyWaveMapComponent = ({ spot }: { spot: SpotsInfoProps }) => {
-  const mapRef = useRef<L.Map | null>(null);
-  const windyRef = useRef<any>(null);
-  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+const MarineWaveChart = ({
+  spot,
+  subscription
+}: {
+  spot: any;
+  subscription: boolean;
+}) => {
+  const [weatherData, setWeatherData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const { lat, lng } = spot;
 
   useEffect(() => {
-    if (typeof window === 'undefined' || mapRef.current) return;
+    const fetchMarineData = async () => {
+      try {
+        const params = {
+          latitude: parseFloat(lat),
+          longitude: parseFloat(lng),
+          current: ['wave_height', 'wave_direction', 'wave_period'],
+          hourly: ['wave_height', 'wave_direction', 'wave_period'],
+          daily: ['wave_height_max', 'wave_direction_dominant']
+        };
+        const url = 'https://marine-api.open-meteo.com/v1/marine';
 
-    const loadWindyAPI = async () => {
-      // Evitar duplicação
-      if (document.getElementById('windy-script')) return;
+        const responses = await fetchWeatherApi(url, params);
+        const response = responses[0];
+        const utcOffsetSeconds = response.utcOffsetSeconds();
+        const hourly = response.hourly();
+        const daily = response.daily();
 
-      // Carregar Windy API dinamicamente
-      const windyScript = document.createElement('script');
-      windyScript.id = 'windy-script';
-      windyScript.src = 'https://api.windy.com/assets/map-forecast/libBoot.js';
-      windyScript.async = true;
-      document.body.appendChild(windyScript);
+        if (!hourly?.variables(0)) return null;
 
-      windyScript.onload = () => {
-        // @ts-ignore
-        if (!window?.windyInit) {
-          console.error('Windy API não carregou corretamente.');
-          return;
-        }
+        const range = (start: number, stop: number, step: number) =>
+          Array.from(
+            { length: (stop - start) / step },
+            (_, i) => start + i * step
+          );
 
-        console.log({ rs11: 1, lat, lng });
-        const options = {
-          key: process.env.NEXT_PUBLIC_WINDY_API_KEY, // Sua chave Windy
-          lat: lat, // Coordenadas iniciais
-          lon: lng,
-          zoom: 9,
-          verbose: true
-          // ecmwfWaves, gfsWaves, iconEuWaves, iconWaves
+        const processedData = {
+          hourly: {
+            time: range(
+              Number(hourly.time()),
+              Number(hourly.timeEnd()),
+              hourly.interval()
+            ).map((t) => new Date((t + utcOffsetSeconds) * 1000)),
+            waveHeight: hourly?.variables(0)?.valuesArray(),
+            waveDirection: hourly?.variables(1)?.valuesArray(),
+            wavePeriod: hourly?.variables(2)?.valuesArray()
+          }
         };
 
-        // Remover qualquer mapa anterior
-        if (mapRef.current) {
-          mapRef.current.remove();
-          mapRef.current = null;
-        }
-
-        // Inicializa Windy API
-        // @ts-ignore
-        window.windyInit(options, (windyAPI: any) => {
-          windyRef.current = windyAPI;
-          const { map, store } = windyAPI;
-          mapRef.current = map;
-
-          L.popup()
-            .setLatLng([lat, lng])
-            .setContent('Ondas em tempo real 🌊')
-            .openOn(map);
-
-          // 🏴 Criando um ícone personalizado
-          const customIcon = L.icon({
-            iconUrl: anchor.src, // 📌 Substitua pelo caminho da sua imagem
-            iconSize: [50, 50],
-            iconAnchor: [25, 50],
-            popupAnchor: [0, -50]
-          });
-
-          // 📍 Lista de pontos no mapa
-
-          // 🔁 Iterar sobre os pontos e adicionar no mapa
-          diveSpots.forEach((spot) => {
-            L.marker([spot.lat, spot.lng], { icon: customIcon }).addTo(map)
-              .bindPopup(`
-                <div className="flex items-center gap-4 mt-4">
-                <b className="text-4xl font-bold text-gray-900">${spot.name}</b><br>
-        <span className="text-yellow-500 text-xl font-semibold flex items-center">
-          ⭐ ${spot.rating}
-        </span>
-        <span className="text-gray-600 text-lg">
-          (${spot?.comments?.length} avaliações)
-        </span>
-      </div>
-                `);
-          });
-        });
-      };
+        setWeatherData(processedData);
+      } catch (error) {
+        console.error('Error fetching marine data:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    // Carregar Leaflet.js dinamicamente (caso não esteja disponível globalmente)
-    if (!window.L) {
-      const leafletScript = document.createElement('script');
-      leafletScript.src = 'https://unpkg.com/leaflet@1.4.0/dist/leaflet.js';
-      leafletScript.async = true;
-      document.body.appendChild(leafletScript);
-      leafletScript.onload = loadWindyAPI;
-    } else {
-      loadWindyAPI();
-    }
-  }, []);
+    fetchMarineData();
+  }, [lat, lng]);
 
   return (
-    <div className="mb-6 px-8 w-full h-[400px] ">
-      <div
-        ref={mapContainerRef}
-        id="windy"
-        className="w-full h-full rounded-lg shadow-md overflow-hidden"
-      ></div>
+    <div className="container mb-6 px-8 w-full">
+      <h2 className="text-2xl font-semibold text-gray-900 mb-5">
+        Marine Conditions
+      </h2>
+
+      {subscription ? (
+        loading ? (
+          <p className="text-gray-600">Loading marine data...</p>
+        ) : weatherData ? (
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart
+              data={weatherData.hourly.time.map((time: any, index: number) => ({
+                time: time.toISOString().split('T')[1].slice(0, 5),
+                waveHeight: weatherData.hourly.waveHeight[index].toFixed(2)
+              }))}
+            >
+              <XAxis dataKey="time" />
+              <YAxis
+                label={{
+                  value: 'Wave Height (m)',
+                  angle: -90,
+                  position: 'insideLeft'
+                }}
+              />
+              <Tooltip />
+              <Line type="monotone" dataKey="waveHeight" stroke="#82ca9d" />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <p className="text-red-500">Failed to load marine data.</p>
+        )
+      ) : (
+        <div className="relative w-full h-[400px] rounded-lg shadow-md overflow-hidden flex items-center justify-center">
+          <img src={marineImage.src} className="w-full h-auto blur-[2px]" />
+          <div className="absolute w-full h-full flex items-center justify-center">
+            <PremiumModal />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default function WindyWaveMap({ spot }: { spot: SpotsInfoProps }) {
-  return (
-    <Suspense>
-      <WindyWaveMapComponent spot={spot} />
-    </Suspense>
-  );
-}
+export default MarineWaveChart;

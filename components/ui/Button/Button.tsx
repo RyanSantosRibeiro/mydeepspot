@@ -32,6 +32,7 @@ const Button = forwardRef<HTMLButtonElement, Props>((props, buttonRef) => {
   const ref = useRef(null);
   const rootClassName = cn(
     styles.root,
+    "w-full bg-gradient-to-r from-blue-500 to-green-400 text-white px-6 py-2 rounded-full font-semibold shadow-md hover:scale-105 transition-all",
     {
       [styles.slim]: variant === 'slim',
       [styles.loading]: loading,

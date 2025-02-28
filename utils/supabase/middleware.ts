@@ -70,6 +70,18 @@ export const updateSession = async (request: NextRequest) => {
     // https://supabase.com/docs/guides/auth/server-side/nextjs
     await supabase.auth.getUser();
 
+    const res = NextResponse.next();
+
+    // Verifica se o cookie já existe
+    const premiumModalShown = request.cookies.get('premiumModalShown');
+
+    if (!premiumModalShown) {
+      // Define o cookie para expirar em 7 dias (604800 segundos)
+      response.cookies.set('premiumModalShown', 'true', {
+        maxAge: 604800
+      });
+    }
+
     return response;
   } catch (e) {
     // If you are here, a Supabase client could not be created!

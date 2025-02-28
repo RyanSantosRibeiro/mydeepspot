@@ -29,15 +29,17 @@ export default function EmailSignIn({
   };
 
   return (
-    <div className="my-8">
+    <div className="my-8 max-w-md mx-auto bg-white  p-6">
       <form
         noValidate={true}
         className="mb-4"
         onSubmit={(e) => handleSubmit(e)}
       >
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <label htmlFor="email">Email</label>
+        <div className="grid gap-4">
+          <div className="grid gap-2">
+            <label htmlFor="email" className="font-medium text-gray-900">
+              Email
+            </label>
             <input
               id="email"
               placeholder="name@example.com"
@@ -46,13 +48,14 @@ export default function EmailSignIn({
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full p-3 rounded-md bg-zinc-800"
+              className="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
+
           <Button
             variant="slim"
             type="submit"
-            className="mt-1"
+            className="w-full bg-green-500 text-white font-semibold p-3 rounded-lg hover:bg-green-600 transition"
             loading={isSubmitting}
             disabled={disableButton}
           >
@@ -60,19 +63,26 @@ export default function EmailSignIn({
           </Button>
         </div>
       </form>
+
       {allowPassword && (
-        <>
+        <div className="text-center text-gray-600 text-sm space-y-2">
           <p>
-            <Link href="/signin/password_signin" className="font-light text-sm">
+            <Link
+              href="/signin/password_signin"
+              className="hover:text-blue-600 transition"
+            >
               Sign in with email and password
             </Link>
           </p>
           <p>
-            <Link href="/signin/signup" className="font-light text-sm">
+            <Link
+              href="/signin/signup"
+              className="text-blue-500 font-medium hover:text-blue-600 transition"
+            >
               Don't have an account? Sign up
             </Link>
           </p>
-        </>
+        </div>
       )}
     </div>
   );

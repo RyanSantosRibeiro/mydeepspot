@@ -27,15 +27,17 @@ export default function PasswordSignIn({
   };
 
   return (
-    <div className="my-8">
+    <div className="my-8 max-w-md mx-auto bg-white  p-6">
       <form
         noValidate={true}
         className="mb-4"
         onSubmit={(e) => handleSubmit(e)}
       >
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <label htmlFor="email">Email</label>
+        <div className="grid gap-4">
+          <div className="grid gap-2">
+            <label htmlFor="email" className="font-medium text-gray-900">
+              Email
+            </label>
             <input
               id="email"
               placeholder="name@example.com"
@@ -44,43 +46,60 @@ export default function PasswordSignIn({
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full p-3 rounded-md bg-zinc-800"
+              className="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-900"
             />
-            <label htmlFor="password">Password</label>
+
+            <label htmlFor="password" className="font-medium text-gray-900">
+              Password
+            </label>
             <input
               id="password"
               placeholder="Password"
               type="password"
               name="password"
               autoComplete="current-password"
-              className="w-full p-3 rounded-md bg-zinc-800"
+              className="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-gray-900"
             />
           </div>
+
           <Button
             variant="slim"
             type="submit"
-            className="mt-1"
+            className="w-full bg-green-500 text-white font-semibold p-3 rounded-lg hover:bg-green-600 transition"
             loading={isSubmitting}
           >
             Sign in
           </Button>
         </div>
       </form>
-      <p>
-        <Link href="/signin/forgot_password" className="font-light text-sm">
+
+      <p className="text-center text-gray-600 text-sm">
+        <Link
+          href="/signin/forgot_password"
+          className="hover:text-blue-600 transition"
+        >
           Forgot your password?
         </Link>
       </p>
+
       {allowEmail && (
-        <p>
-          <Link href="/signin/email_signin" className="font-light text-sm">
+        <p className="text-center text-gray-600 text-sm">
+          <Link
+            href="/signin/email_signin"
+            className="hover:text-blue-600 transition"
+          >
             Sign in via magic link
           </Link>
         </p>
       )}
-      <p>
-        <Link href="/signin/signup" className="font-light text-sm">
-          Don't have an account? Sign up
+
+      <p className="text-center text-gray-600 text-sm">
+        Don't have an account?{' '}
+        <Link
+          href="/signin/signup"
+          className="text-blue-500 font-medium hover:text-blue-600 transition"
+        >
+          Sign up
         </Link>
       </p>
     </div>

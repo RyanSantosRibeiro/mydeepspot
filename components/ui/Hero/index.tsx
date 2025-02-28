@@ -4,6 +4,7 @@ import { LoadScript, Autocomplete } from '@react-google-maps/api';
 import bg from '../../../assets/bg.jpg';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Logo from '@/components/icons/Logo';
 
 export default function Hero() {
   const router = useRouter();
@@ -51,15 +52,15 @@ export default function Hero() {
     >
       {/* Overlay com busca e título */}
       <div className="relative top-0 left-0 w-full min-h-full h-full flex flex-col items-start justify-center px-8 lg:px-16 bg-gradient-to-r from-black/40 to-transparent">
-        <h1 className="text-white text-sm lg:text-5xl font-bold">
-          Our deep spot...
+        <h1 className="text-white text-sm lg:text-5xl font-bold flex gap-2 items-center ">
+          <Logo className="w-auto h-max" />
+          My Deep Spot
         </h1>
         <h2 className="text-white text-3xl lg:text-9xl font-bold mt-2">
           EXPLORE THE SEA
         </h2>
         <p className="text-white text-lg mt-4 w-1/2">
-          Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore.
+        Discover the wonders beneath the waves. Dive into crystal-clear waters, explore vibrant coral reefs, and experience the magic of the ocean like never before.
         </p>
         {/* Botões */}
         <div className="mt-6 flex gap-4 max-lg:flex-col w-full md:w-auto">
@@ -87,9 +88,9 @@ export default function Hero() {
           >
             Discover
           </button>
-          <button className="border border-white text-white px-6 py-3 rounded-full font-semibold whitespace-nowrap">
+          {/* <a href='#resume-dives' className="border border-white text-white px-6 py-3 rounded-full font-semibold whitespace-nowrap">
             Know More
-          </button>
+          </a> */}
         </div>
         {/* Barra de busca estilizada */}
         <div className="absolute top-20 right-10 bg-white/20 backdrop-blur-lg p-6 rounded-xl w-80 shadow-lg hidden">

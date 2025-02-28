@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import logoPng from '../../assets/logo.png';
+import logoPng from '../../assets/logo-white.png';
 const Logo = ({ ...props }) => (
   <Image width="32" height="32" alt="Logo" src={logoPng.src} {...props} />
   // <svg

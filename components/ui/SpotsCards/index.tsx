@@ -14,41 +14,31 @@ import Image from 'next/image';
 import { SpotsInfoProps } from '@/app/spots/[id]/page';
 
 const filtersList = [
-  'Mais Avaliados',
-  'Mais Novos',
-  'America do Sul',
-  'America do Norte',
-  'Europa',
-  'Asia',
-  'Oceania'
+  'Highest Rated',
+  'Newest'
 ];
 
-const SpotsCards = () => {
+const SpotsCards = ({spots}:{spots: SpotsInfoProps[]}) => {
   const router = useRouter();
   const [activeFilter, setActiveFilter] = useState<string>('empty');
 
   const toggleFilter = (filter: string) => {
+    console.log({spots})
     setActiveFilter(prev => (prev === filter ? 'empty' : filter));
   };
 
-  const sortSpots = (spots: typeof diveSpots) => {
-    if (activeFilter === 'Mais Avaliados') {
+  const sortSpots = (spots: SpotsInfoProps[]) => {
+    if (activeFilter === 'Highest Rated') {
       return [...spots].sort((a, b) => b.rating - a.rating);
     }
-    if (activeFilter === 'Mais Novos') {
+    if (activeFilter === 'Newest') {
       return [...spots].sort((a, b) => Number(b.id) - Number(a.id));
     }
     return spots;
   };
 
   const filterSpots = () => {
-    let filteredSpots = diveSpots;
-
-    if (['America do Sul', 'America do Norte', 'Europa', 'Asia', 'Oceania'].includes(activeFilter)) {
-      filteredSpots = filteredSpots.filter(spot => spot.region === activeFilter);
-    }
-
-    return sortSpots(filteredSpots);
+    return sortSpots(spots);
   };
 
   const handleSelect = (spot: any) => {
@@ -56,13 +46,13 @@ const SpotsCards = () => {
   };
 
   return (
-    <div className="bg-gray-100 flex flex-col overflow-hidden w-full">
+    <div id='resume-dives' className="bg-gray-100 flex flex-col overflow-hidden w-full pt-5">
       <div className="w-full px-6 mx-auto">
         <h2 className="text-2xl font-semibold text-gray-800 my-6">Popular Dive Spots</h2>
         
-        {/* Filtros */}
+        {/* Filters */}
         <div className="flex flex-wrap gap-2 mb-6">
-          {filtersList.map(filter => (
+          {filtersList?.map(filter => (
             <p
               key={filter}
               onClick={() => toggleFilter(filter)}
@@ -77,9 +67,9 @@ const SpotsCards = () => {
           ))}
         </div>
 
-        {/* Lista de Spots */}
+        {/* Spot List */}
         <div className="grid grid-cols-5 gap-8 mb-16">
-          {filterSpots().map((spot:SpotsInfoProps) => (
+          {filterSpots()?.map((spot: SpotsInfoProps) => (
             <div
               key={spot.id}
               onClick={() => handleSelect(spot)}
@@ -87,7 +77,7 @@ const SpotsCards = () => {
             >
               <div className="relative max-lg:w-[20%]">
                 <Image
-                  src={spot?.src || bg.src}
+                  src={spot?.spots_images?.[0]?.src || bg.src}
                   alt={spot?.name || 'Image'}
                   className="object-cover w-full h-40"
                   width={480}

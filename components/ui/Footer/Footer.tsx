@@ -5,7 +5,7 @@ import GitHub from '@/components/icons/GitHub';
 
 export default function Footer() {
   return (
-    <footer className="mx-auto max-w-[1920px] px-6 bg-zinc-900">
+    <footer className="mx-auto max-w-[1920px] my-4 px-6 bg-zinc-900">
       <div className="grid grid-cols-1 gap-8 py-12 text-white transition-colors duration-150 border-b lg:grid-cols-12 border-zinc-600 bg-zinc-900">
         <div className="col-span-1 lg:col-span-2">
           <Link
@@ -30,18 +30,10 @@ export default function Footer() {
             </li>
             <li className="py-3 md:py-0 md:pb-4">
               <Link
-                href="/"
+                href="https://www.linkedin.com/in/ryan-santos-ribeiro/"
                 className="text-white transition duration-150 ease-in-out hover:text-zinc-200"
               >
                 About
-              </Link>
-            </li>
-            <li className="py-3 md:py-0 md:pb-4">
-              <Link
-                href="/"
-                className="text-white transition duration-150 ease-in-out hover:text-zinc-200"
-              >
-                Blog
               </Link>
             </li>
           </ul>
@@ -55,15 +47,7 @@ export default function Footer() {
             </li>
             <li className="py-3 md:py-0 md:pb-4">
               <Link
-                href="/"
-                className="text-white transition duration-150 ease-in-out hover:text-zinc-200"
-              >
-                Privacy Policy
-              </Link>
-            </li>
-            <li className="py-3 md:py-0 md:pb-4">
-              <Link
-                href="/"
+                href="/terms-of-use"
                 className="text-white transition duration-150 ease-in-out hover:text-zinc-200"
               >
                 Terms of Use

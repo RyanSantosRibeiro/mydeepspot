@@ -25,20 +25,15 @@ const filtersList = [
 
 const SpotsBanner = ({spot}: {spot: SpotsInfoProps}) => {
   const [showGallery, setShowGallery] = useState(false);
+  console.log({ rs1: spot });
+  if(!spot) return null;
   return (
     <div className="bg-gray-100 flex flex-col overflow-hidden w-full">
       <div className="w-full">
         {/* Banner com imagens */}
-        <section className="relative w-full h-[400px] bg-gray-200 flex items-center justify-center">
-          <Image
-            src={spot.mainImage || bg}
-            alt={spot?.name || 'banner'}
-            layout="fill"
-            objectFit="cover"
-            className=""
-          />
+        <section style={{backgroundImage: `url(${spot?.spots_images?.[0]?.src || bg})`}} className="bg-center bg-cover bg-no-repeat relative w-full h-[400px] bg-gray-200 flex items-center justify-center">
           <div className="absolute bottom-4 left-4 flex gap-2">
-            {spot.images
+            {spot.spots_images
               ?.slice(0, 4)
               .map((img, index) => (
                 <Image
@@ -61,13 +56,13 @@ const SpotsBanner = ({spot}: {spot: SpotsInfoProps}) => {
             onClick={() => setShowGallery(false)}
           >
             <div className="grid grid-cols-3 gap-4 p-8 bg-white rounded-lg">
-              {spot.images?.map((img, index) => (
+              {spot.spots_images?.map((img, index) => (
                 <Image
                   key={index}
                   src={img.src}
                   alt={`Imagem ${index + 1}`}
-                  width={200}
-                  height={200}
+                  width={600}
+                  height={600}
                   className="rounded-lg"
                 />
               ))}

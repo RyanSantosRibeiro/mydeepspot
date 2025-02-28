@@ -3,11 +3,11 @@
 import {
   Autocomplete,
   GoogleMap,
+  GoogleMarkerClusterer,
   LoadScript,
   Marker
 } from '@react-google-maps/api';
-import { diveSpots } from '../../../assets/data';
-import anchorIcon from '../../../assets/anchor.png';
+import anchorIcon from '@/assets/anchor.png';
 import { SpotsInfoProps } from '@/app/spots/[id]/page';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -33,42 +33,41 @@ const mapOptions: google.maps.MapOptions = {
       stylers: [{ color: '#c9e4f1' }]
     }
   ],
+  gestureHandling: "greedy",
   mapTypeControl: false,
   fullscreenControl: false
 };
 
 const SpotsMapsComponent = ({ spot }: { spot: SpotsInfoProps }) => {
-  const [visibleSpots, setVisibleSpots] = useState<SpotsInfoProps[]>([]);
+  // const [visibleSpots, setVisibleSpots] = useState<SpotsInfoProps[]>([]);
   const [googleMaps, setGoogleMaps] = useState<any | null>(null);
 
   const onMapLoad = (map: google.maps.Map) => {
-    setVisibleSpots(diveSpots);
-    console.log('22222222222');
+    if (!googleMaps) {
+      if (window?.google && typeof window !== 'undefined') {
+        console.log({window})
+        setGoogleMaps({
+          scaledSize: new window.google.maps.Size(40, 40), // 🔹 Tamanho do ícone
+          origin: new window.google.maps.Point(0, 0),
+          anchor: new window.google.maps.Point(20, 40) // 🔹 Ajusta o ponto de ancoragem
+        });
+      }
+    }
     // map.addListener('bounds_changed', () => {
     //   setVisibleSpots(getVisibleDiveSpots(map));
     // });
   };
 
-  useEffect(() => {
-   if(!googleMaps) {
-    if (typeof window !== 'undefined' && window.google) {
-      setGoogleMaps({
-        scaledSize: new window.google.maps.Size(40, 40), // 🔹 Tamanho do ícone
-        origin: new window.google.maps.Point(0, 0),
-        anchor: new window.google.maps.Point(20, 40) // 🔹 Ajusta o ponto de ancoragem
-      });
-    }
-   }
-  });
 
-  const location = {
-    lat: spot.lat,
-    lng: spot.lng
+  const location: Location = {
+    lat: parseFloat(spot.lat),
+    lng: parseFloat(spot.lng)
   };
 
+
   return (
-    <section className="py-8 w-full">
-      <div className="px-8  mx-auto h-[400px] w-full mt-4 ">
+    <section className="w-full">
+      <div className="mx-auto w-full h-[400px]">
         <LoadScript
           googleMapsApiKey={
             process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
@@ -83,19 +82,15 @@ const SpotsMapsComponent = ({ spot }: { spot: SpotsInfoProps }) => {
               options={mapOptions}
               onLoad={onMapLoad}
             >
-              {visibleSpots && googleMaps &&
-                visibleSpots?.map((spot, index) => (
-                  <Marker
-                    key={index}
-                    position={{ lat: spot.lat, lng: spot.lng }}
-                    icon={{
-                      url: anchorIcon.src, // 🖼️ Caminho do seu ícone (pode ser uma URL externa)
-                      scaledSize: googleMaps?.scaledSize, // 🔹 Tamanho do ícone
-                      origin: googleMaps?.origin,
-                      anchor: googleMaps?.anchor // 🔹 Ajusta o ponto de ancoragem
-                    }}
-                  />
-                ))}
+              <Marker
+                position={location}
+                icon={{
+                  url: anchorIcon.src, // 🖼️ Caminho do seu ícone (pode ser uma URL externa)
+                  scaledSize: googleMaps?.scaledSize, // 🔹 Tamanho do ícone
+                  origin: googleMaps?.origin,
+                  anchor: googleMaps?.anchor // 🔹 Ajusta o ponto de ancoragem
+                }}
+              />
             </GoogleMap>
           </div>
         </LoadScript>
